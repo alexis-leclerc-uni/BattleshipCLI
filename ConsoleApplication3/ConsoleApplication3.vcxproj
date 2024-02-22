@@ -128,7 +128,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="ConsoleApplication3.cpp" />
+    <ClCompile Include="main.cpp" />
     <ClCompile Include="lib\Bateau.cpp" />
     <ClCompile Include="lib\Carte.cpp" />
     <ClCompile Include="lib\Joueur.cpp" />
