@@ -128,6 +128,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="lib\jeu.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="lib\Bateau.cpp" />
     <ClCompile Include="lib\Carte.cpp" />
@@ -137,6 +138,7 @@
     <ClInclude Include="lib\Bateau.h" />
     <ClInclude Include="lib\Carte.h" />
     <ClInclude Include="lib\Coordonnee.h" />
+    <ClInclude Include="lib\jeu.h" />
     <ClInclude Include="lib\Joueur.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
