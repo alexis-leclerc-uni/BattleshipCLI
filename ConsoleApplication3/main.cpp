@@ -3,12 +3,20 @@
 
 #include <iostream>
 #include "lib/Joueur.h"
+#include "lib/Coordonnee.h"
 
 int main()
 {
-	Joueur joueur;
+	Joueur* joueur = new Joueur();
+	Joueur* joueur2 = new Joueur();
 
-	joueur.afficher(std::cout);
+	Coordonnee coords;
+	coords.x = 1;
+	coords.y = 1;
+	joueur->tirer(coords, joueur2);
+	joueur->afficher(std::cout);
+
+	return 0;
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu

@@ -32,19 +32,24 @@ bool Joueur::aPerdu()
 //Description : Tirer permet d'envoyer un missile sur la carte de l'adversaire
 //Entrée : Prend la position du tir, le joueur adversaire
 //Sortie : Retourne si le tir est effectué (même si le tir n'est pas un hit, il retourne vrai)
-uint8_t Joueur::tirer(Coordonnee position, Joueur adversaire)
+uint8_t Joueur::tirer(Coordonnee position, Joueur* adversaire)
 {
     //S'il y a une erreur (déjà tirer ou Out Of Bound)
-    int etatCase = adversaire.carte.tirer(position);
+    int etatCase = adversaire->carte.tirer(position);
     if (etatCase == 1 || etatCase == 2)
         return etatCase;
+	if (etatCase == 0) {
+		return 0;
+	}
     
     //Le tir est réussi
     etatCase -= 3; // pour obtenir l'index du bateau
-    if (adversaire.bateau[etatCase]->endommagerBateau(position))
+    if (adversaire->bateau[etatCase] && adversaire->bateau[etatCase]->endommagerBateau(position)) {//marche po
         return 3; //Erreur dans endommagerBateau
+    }
     return 0; // Le tout est réussi
 }
+
 //Description : La fonction permet d'installer un bateau sur la carte
 //Entrée : Prend la position, l'orientation et la taille
 //Sortie : Retourne si le bateau a été placé
@@ -78,6 +83,10 @@ bool Joueur::ajouterBateau(int x, int y, bool horizontal, int taille)
     actualiseCarte();
     return true;
 }
+
+int Joueur::getNbBateau() {
+    return nbBateau;
+}
 //Description : Afficher la carte du joueur
 //Entrée : Aucune entrée
 //Sortie : Retourne s'il a réussi à afficher la carte du joueur
@@ -92,6 +101,7 @@ bool Joueur::afficher(std::ostream &s)
 
     std::string taponnage = "";
 
+    int** table = carte.getTableau();
 
     for (int y = 0; y < sizeY; y++)
     {
@@ -110,9 +120,8 @@ bool Joueur::afficher(std::ostream &s)
 					taponnage = beginRouge + "*" + escapeRouge;
 					break;
             }
-            s << "[" << beginRouge << "*" << escapeRouge << "]";
             */
-            s << "[" << carte.getTableau()[x][y] << "]";
+            s << "[" << carte.getTableau()[y][x] << "]";
         }
         s << std::endl;
     }

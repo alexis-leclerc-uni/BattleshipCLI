@@ -11,10 +11,11 @@ class Joueur {
         Joueur();
         ~Joueur();
         bool aPerdu();
-        uint8_t tirer(Coordonnee position, Joueur adversaire);
+        uint8_t tirer(Coordonnee position, Joueur* adversaire);
         bool ajouterBateau(int x, int y, bool horizontal, int taille);
         bool afficher(std::ostream &s);
         bool actualiseCarte();
+        int getNbBateau();
     private:
         std::vector<Bateau*> bateau;
         Carte carte;
