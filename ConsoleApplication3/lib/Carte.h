@@ -22,7 +22,7 @@ class Carte {
         int** getTableau();
 
     private:
-        int** tableau;
+        int* *tableau;
         int tailleEnX;
         int tailleEnY;
         int nbBateau;

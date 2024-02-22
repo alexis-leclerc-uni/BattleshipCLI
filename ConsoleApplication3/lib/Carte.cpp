@@ -10,9 +10,7 @@ Carte::Carte(int tailleEnX1, int tailleEnY1)
     for (int i = 0; i < tailleEnY; i++)
     {
         tableau[i] = new int[tailleEnX];
-		for (int j = 0; j < tailleEnX; j++) {
-			tableau[i][j] = 0;
-		}
+        tableau[i] = {};
     }
     nbBateau = 0;
 }
@@ -62,8 +60,7 @@ int Carte::tirer(Coordonnee position)
     if (etatCase == 0) 
     {
         etatCase = 1;
-        tableau[position.y][position.x] = etatCase;
-        return MISS; //rencarte.getTableau()[y][xcarte.getTableau()[y][xcarte.getTableau()[y][xcarte.getTableau()[y][x] un MISS
+        return MISS; //renvoie un MISS
     }
     tableau[position.y][position.x] = 2;
     return etatCase; //renvoie un HIT avec l'index du bateau + 3
@@ -98,5 +95,5 @@ bool Carte::afficher()
 }
 
 int** Carte::getTableau() {
-    return this->tableau;
+    return tableau;
 }
