@@ -19,6 +19,7 @@ class Carte {
         int getTailleEnX();
         int getTailleEnY();
         bool afficher();
+        int** getTableau();
 
     private:
         int* *tableau;

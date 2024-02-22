@@ -8,8 +8,7 @@ int main()
 {
 	Joueur joueur;
 
-	std::cout << "yo";
-
+	joueur.afficher(std::cout);
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
