@@ -1,14 +1,65 @@
 // ConsoleApplication3.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
 
-#include <iostream>
-#include "lib/Joueur.h"
+#include "lib/jeu.h"
+#include <fstream>
 
 int main()
 {
-	Joueur joueur;
-
-	joueur.afficher(std::cout);
+	/*
+	std::vector<Joueur*> joueur;
+	joueur.push_back(new Joueur(10, 10));
+	joueur.push_back(new Joueur(10, 10));
+	
+	joueur[0]->ajouterBateau(2, 2, true, 4);
+	joueur[1]->ajouterBateau(2, 2, true, 4);
+	Coordonnee pos = { 2,2 };
+	
+	for (int i = 0; i < 4; i++)
+	{
+		std::cout << "Tirer = " << joueur[1]->tirer(pos, joueur[0]) << std::endl;
+		pos.x += 1;
+	}
+	
+	std::cout << joueur[0]->aPerdu() << std::endl;
+	
+	delete joueur[0];
+	delete joueur[1];
+	return 0;	
+	*/
+    std::ifstream myFile("lib/Test.txt", std::ios_base::in);
+    Jeu jeu;
+    int reponse;
+    while ((reponse = jeu.menuStartUp(std::cout, myFile)) == INCORRECT) {}
+    if (reponse == QUITTER)
+        return 0;
+    //Le joueur commence
+    do {
+        jeu.menuReglage(std::cout, myFile);
+        //jeu.menuReglage(std::cout, std::cin);
+        jeu.ajouterJoueur();
+        jeu.ajouterJoueur();
+        jeu.menuInitJoueur(std::cout, myFile, jeu.getJoueur(0)); // Joueur 1 place ses bateaux
+        //jeu.menuInitJoueur(std::cout, std::cin, jeu.getJoueur(0)); // Joueur 1 place ses bateaux
+        jeu.menuInitJoueur(std::cout, myFile, jeu.getJoueur(1)); // Joueur 2 place ses bateaux
+        //jeu.menuInitJoueur(std::cout, std::cin, jeu.getJoueur(1)); // Joueur 2 place ses bateaux
+        
+        while (!jeu.getJoueur(0)->aPerdu())
+        {
+            jeu.menuTir(std::cout, myFile, jeu.getJoueur(0), jeu.getJoueur(1));
+            //jeu.menuTir(std::cout, std::cin, jeu.getJoueur(0), jeu.getJoueur(1));
+            if (jeu.getJoueur(1)->aPerdu())
+                break;
+            jeu.menuTir(std::cout, myFile, jeu.getJoueur(1), jeu.getJoueur(0));
+            //jeu.menuTir(std::cout, std::cin, jeu.getJoueur(1), jeu.getJoueur(0));
+        }
+        while ((reponse = jeu.menuFin(std::cout, std::cin)) == INCORRECT) {}
+        if (reponse == QUITTER)
+            return 0;
+    } while (true);
+    myFile.close();
+    //Écrire la base
+    return 0;
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu

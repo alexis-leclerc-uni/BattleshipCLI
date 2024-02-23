@@ -1,11 +1,10 @@
 #include "Joueur.h"
-
 //Description : Construit une instance de Joueur
 //Entrée : Aucune entrée
 //Sortie : Aucune sortie
-Joueur::Joueur()
+Joueur::Joueur(int tailleEnX, int taillEnY)
 {
-    nbBateau = 0;
+    carte = new Carte(tailleEnX, taillEnY);
 }
 //Description : Déconstruteur d'une instance de Joueur
 //Entrée : Aucune entrée
@@ -16,13 +15,14 @@ Joueur::~Joueur()
     {
         delete bateau[i];
     }
+    delete carte;
 }
 //Description : retourne si le joueur a perdu
 //Entrée : Aucune entrée
 //Sortie : Retourne un bool (vrai si le joueur a perdu)
 bool Joueur::aPerdu()
 {
-    for (int i = 0; i < nbBateau; i++)
+    for (int i = 0; i < bateau.size(); i++)
     {
         if (!bateau[i]->getCoule()) // Il en faut au moins un bateau vivant
             return false;
@@ -32,16 +32,19 @@ bool Joueur::aPerdu()
 //Description : Tirer permet d'envoyer un missile sur la carte de l'adversaire
 //Entrée : Prend la position du tir, le joueur adversaire
 //Sortie : Retourne si le tir est effectué (même si le tir n'est pas un hit, il retourne vrai)
-uint8_t Joueur::tirer(Coordonnee position, Joueur adversaire)
+int Joueur::tirer(Coordonnee position, Joueur* adversaire)
 {
     //S'il y a une erreur (déjà tirer ou Out Of Bound)
-    int etatCase = adversaire.carte.tirer(position);
-    if (etatCase == 1 || etatCase == 2)
+    int etatCase = adversaire->carte->tirer(position);
+    //std::cout << "Etat Case = " << etatCase << std::endl;
+    if (etatCase == DEJATIRER || etatCase == OUTOFBOUND)
         return etatCase;
-    
+    if (etatCase == MISS)
+        return MISS;
     //Le tir est réussi
     etatCase -= 3; // pour obtenir l'index du bateau
-    if (adversaire.bateau[etatCase]->endommagerBateau(position))
+
+    if (adversaire->bateau[etatCase]->endommagerBateau(position))
         return 3; //Erreur dans endommagerBateau
     return 0; // Le tout est réussi
 }
@@ -53,14 +56,15 @@ bool Joueur::ajouterBateau(int x, int y, bool horizontal, int taille)
     //Vérifie que le bateau est dans la carte
     if (horizontal) //horizontal
     {
-        if (0 <= x && x - taille + 1 < carte.getTailleEnX() && 0 <= y && y < carte.getTailleEnY())
+        if (!(0 <= x && x + taille - 1 < carte->getTailleEnX() && 0 <= y && y < carte->getTailleEnY()))
             return false;
-    } else { //vertical
-        if (0 <= y && y - taille + 1 < carte.getTailleEnY() && 0 <= x && x < carte.getTailleEnX())
+    }
+    else { //vertical
+        if (!(0 <= y && y + taille - 1 < carte->getTailleEnY() && 0 <= x && x < carte->getTailleEnX()))
             return false;
     }
     //Vérifie qu'il n'y a pas de superposition entre bateau
-    for (int i = 0; i < nbBateau; i++)
+    for (int i = 0; i < bateau.size(); i++)
     {
         if (horizontal == true && bateau[i]->getOrientation() == false && bateau[i]->getCoordonnee().y <= y && y < bateau[i]->getCoordonnee().y + bateau[i]->getTaille() && x <= bateau[i]->getCoordonnee().x && bateau[i]->getCoordonnee().x < x + taille)
             return false;
@@ -72,50 +76,15 @@ bool Joueur::ajouterBateau(int x, int y, bool horizontal, int taille)
             return false;
     }
     // Le bateau peut être placé
-    
-    bateau.push_back(new Bateau(x,y,horizontal,taille));
-    nbBateau++;
+    bateau.push_back(new Bateau(x, y, horizontal, taille));
     actualiseCarte();
     return true;
 }
 //Description : Afficher la carte du joueur
 //Entrée : Aucune entrée
 //Sortie : Retourne s'il a réussi à afficher la carte du joueur
-bool Joueur::afficher(std::ostream &s)
+bool Joueur::afficher()
 {
-    int sizeX, sizeY;
-    sizeX = carte.getTailleEnX();
-    sizeY = carte.getTailleEnY();
-
-    std::string beginRouge = "\033[31m";
-	std::string escapeRouge = "\033[0m";
-
-    std::string taponnage = "";
-
-
-    for (int y = 0; y < sizeY; y++)
-    {
-        for (int x = 0; x < sizeX; x++)
-        {
-            /*
-            switch (carte.getTableau()[y][x])
-            {
-				case 0:
-					taponnage = " ";
-					break;
-                case 1:
-					taponnage = "*";
-					break;
-                case 2:
-					taponnage = beginRouge + "*" + escapeRouge;
-					break;
-            }
-            s << "[" << beginRouge << "*" << escapeRouge << "]";
-            */
-            s << "[" << carte.getTableau()[x][y] << "]";
-        }
-        s << std::endl;
-    }
     return false;
 }
 //Description : Actualise la carte du joueur
@@ -123,5 +92,5 @@ bool Joueur::afficher(std::ostream &s)
 //Sortie : Retourne un bool (vrai si l'opération est réussie)
 bool Joueur::actualiseCarte()
 {
-    return carte.initialiserBateau(bateau);
+    return carte->initialiserBateau(bateau);
 }

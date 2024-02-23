@@ -93,7 +93,3 @@ bool Carte::afficher()
 {
     return false;
 }
-
-int** Carte::getTableau() {
-    return tableau;
-}

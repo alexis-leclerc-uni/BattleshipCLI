@@ -1,24 +1,22 @@
 #ifndef JOUEUR
 #define JOUEUR
 #include <vector>
-#include <iostream>
 #include "Bateau.h"
 #include "Carte.h"
-
+#include <iostream>
 
 class Joueur {
     public:
-        Joueur();
+        Joueur(int tailleEnX, int tailleEnY);
         ~Joueur();
         bool aPerdu();
-        uint8_t tirer(Coordonnee position, Joueur adversaire);
+        int tirer(Coordonnee position, Joueur* adversaire);
         bool ajouterBateau(int x, int y, bool horizontal, int taille);
-        bool afficher(std::ostream &s);
+        bool afficher();
         bool actualiseCarte();
     private:
         std::vector<Bateau*> bateau;
-        Carte carte;
-        int nbBateau;
+        Carte *carte;
 
 };
 

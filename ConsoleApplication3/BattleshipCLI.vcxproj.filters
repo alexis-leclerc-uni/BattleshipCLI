@@ -18,28 +18,39 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="lib\Bateau.cpp">
+    <ClCompile Include="..\..\P13-Battleship\Bateau.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="lib\Carte.cpp">
+    <ClCompile Include="..\..\P13-Battleship\Carte.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="lib\Joueur.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="lib\jeu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="lib\Bateau.h">
+    <ClInclude Include="..\..\P13-Battleship\Bateau.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="lib\Carte.h">
+    <ClInclude Include="..\..\P13-Battleship\Carte.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="lib\Coordonnee.h">
+    <ClInclude Include="..\..\P13-Battleship\Coordonnee.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="lib\Joueur.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="lib\jeu.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="lib\Test.txt">
+      <Filter>Source Files</Filter>
+    </Text>
   </ItemGroup>
 </Project>

@@ -3,8 +3,8 @@
 //Description : Le constructeur permet la création de la classe Bateau
 //Entrée : La position du bateau (en bas à gauche) en coordonnee x et y, l'orientation (horizontale et verticale) et la taille
 //Sortie : Il n'y a pas de sortie
-Bateau::Bateau(int x1 = -1, int y1 = -1, bool horizontal1 = true, int taille1 = 4)
-{
+Bateau::Bateau(int x1 = -1, int y1 = -1, bool horizontal1 = true, int taille1)
+{ 
     coordonnee = {x1,y1};
     horizontal = horizontal1;
     taille = taille1;
