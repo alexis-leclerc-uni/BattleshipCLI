@@ -12,7 +12,7 @@ class Joueur {
         bool aPerdu();
         int tirer(Coordonnee position, Joueur* adversaire);
         bool ajouterBateau(int x, int y, bool horizontal, int taille);
-        bool afficher();
+        bool afficher(std::ostream& s);
         bool actualiseCarte();
     private:
         std::vector<Bateau*> bateau;

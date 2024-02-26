@@ -6,27 +6,28 @@
 
 int main()
 {
-	/*
 	std::vector<Joueur*> joueur;
 	joueur.push_back(new Joueur(10, 10));
 	joueur.push_back(new Joueur(10, 10));
 	
 	joueur[0]->ajouterBateau(2, 2, true, 4);
-	joueur[1]->ajouterBateau(2, 2, true, 4);
-	Coordonnee pos = { 2,2 };
+	//joueur[1]->ajouterBateau(0, 0, true, 4);
+	Coordonnee pos = { 0,0};
 	
-	for (int i = 0; i < 4; i++)
+	for (int i = 2; i < 8; i++)
 	{
-		std::cout << "Tirer = " << joueur[1]->tirer(pos, joueur[0]) << std::endl;
-		pos.x += 1;
+        pos.y = i;
+		joueur[0]->tirer(pos, joueur[1]);
+        std::cout << "Pos x :" <<  pos.x << "  Pos y : " << pos.y << std::endl;
 	}
 	
+    joueur[1]->afficher(std::cout);
 	std::cout << joueur[0]->aPerdu() << std::endl;
 	
 	delete joueur[0];
 	delete joueur[1];
 	return 0;	
-	*/
+    /*
     std::ifstream myFile("lib/Test.txt", std::ios_base::in);
     Jeu jeu;
     int reponse;
@@ -59,6 +60,7 @@ int main()
     } while (true);
     myFile.close();
     //Écrire la base
+    */
     return 0;
 }
 
