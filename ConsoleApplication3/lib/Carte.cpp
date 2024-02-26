@@ -63,7 +63,7 @@ int Carte::tirer(Coordonnee position)
     int etatCase = tableau[position.y][position.x];
     if (etatCase == MISS)
     {
-        tableau[position.y][position.y] = 1;
+        tableau[position.y][position.x] = 1;
         return MISS; //renvoie un MISS
     }
     tableau[position.y][position.x] = 2;
