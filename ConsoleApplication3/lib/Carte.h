@@ -1,6 +1,7 @@
 #ifndef CARTE
 #define CARTE
 #include <vector>
+#include <iostream>
 #include "Bateau.h"
 #include "Coordonnee.h"
 

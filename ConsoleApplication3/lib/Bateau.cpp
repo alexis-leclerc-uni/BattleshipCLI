@@ -3,12 +3,14 @@
 //Description : Le constructeur permet la création de la classe Bateau
 //Entrée : La position du bateau (en bas à gauche) en coordonnee x et y, l'orientation (horizontale et verticale) et la taille
 //Sortie : Il n'y a pas de sortie
-Bateau::Bateau(int x1 = -1, int y1 = -1, bool horizontal1 = true, int taille1)
-{ 
-    coordonnee = {x1,y1};
+Bateau::Bateau(int x1, int y1, bool horizontal1, int taille1)
+{
+    coordonnee = { x1,y1 };
     horizontal = horizontal1;
     taille = taille1;
-    cases = new bool[taille] {true};
+    cases = new bool[taille];
+    for (int i = 0; i < taille; i++)
+        cases[i] = true;
     coule = false;
 }
 //Description : Le déconstructeur permet de détruire l'instance. Détruit le tableau dynamique cases
@@ -42,24 +44,28 @@ bool Bateau::endommagerBateau(Coordonnee position)
     if (horizontal && coordonnee.y == position.y && coordonnee.x <= position.x && position.x < coordonnee.x + taille)
     {
         cases[position.x - coordonnee.x] = false;
-        coule = false;
+        coule = true;
         for (int i = 0; i < taille; i++)
         {
             if (cases[i])
-                coule = true;
+            {
+                coule = false;
                 break;
+            }
         }
         return true;
     }
     if (coordonnee.x == position.x && coordonnee.y <= position.y && position.y < coordonnee.y + taille)
     {
         cases[position.y - coordonnee.y] = false;
-        coule = false;
+        coule = true;
         for (int i = 0; i < taille; i++)
         {
             if (cases[i])
-                coule = true;
+            {
+                coule = false;
                 break;
+            }
         }
         return true;
     }

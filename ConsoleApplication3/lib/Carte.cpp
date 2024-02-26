@@ -6,11 +6,12 @@ Carte::Carte(int tailleEnX1, int tailleEnY1)
 {
     tailleEnX = tailleEnX1;
     tailleEnY = tailleEnY1;
-    tableau = new int*[tailleEnY];
-    for (int i = 0; i < tailleEnY; i++)
+    tableau = new int* [tailleEnY];
+    for (int y = 0; y < tailleEnY; y++)
     {
-        tableau[i] = new int[tailleEnX];
-        tableau[i] = {};
+        tableau[y] = new int[tailleEnX];
+        for (int x = 0; x < tailleEnX; x++)
+            tableau[y][x] = 0;
     }
     nbBateau = 0;
 }
@@ -36,8 +37,9 @@ bool Carte::initialiserBateau(std::vector<Bateau*> bateau)
         {
             if (bateau[i]->getOrientation()) //On retranscrit le bateau sur la carte (Carte ne le sait pas => donné brut sans objet)
             {
-                tableau[bateau[i]->getCoordonnee().y][bateau[i]->getCoordonnee().x + j] = i + 3; 
-            } else {
+                tableau[bateau[i]->getCoordonnee().y][bateau[i]->getCoordonnee().x + j] = i + 3;
+            }
+            else {
                 tableau[bateau[i]->getCoordonnee().y + j][bateau[i]->getCoordonnee().x] = i + 3;
             }
         }
@@ -50,16 +52,18 @@ bool Carte::initialiserBateau(std::vector<Bateau*> bateau)
 //Sortie : Retourne la taille en Y de la carte
 int Carte::tirer(Coordonnee position)
 {
-    if (dejaTirer(position))
-        return DEJATIRER;
-    
+
+
     if (position.x < 0 || position.x >= tailleEnX || position.y < 0 || position.y >= tailleEnY)
         return OUTOFBOUND;
-    
+
+    if (dejaTirer(position))
+        return DEJATIRER;
+
     int etatCase = tableau[position.y][position.x];
-    if (etatCase == 0) 
+    if (etatCase == MISS)
     {
-        etatCase = 1;
+        tableau[position.y][position.y] = 1;
         return MISS; //renvoie un MISS
     }
     tableau[position.y][position.x] = 2;
