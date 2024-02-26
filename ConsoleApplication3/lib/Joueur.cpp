@@ -99,8 +99,7 @@ bool Joueur::afficher(std::ostream& s)
     {
         for (int x = 0; x < sizeX; x++)
         {
-            /*
-            switch (carte.getTableau()[y][x])
+            switch (carte->getPositionTableau(y, x))
             {
                 case 0:
                     taponnage = " ";
@@ -112,9 +111,8 @@ bool Joueur::afficher(std::ostream& s)
                     taponnage = beginRouge + "*" + escapeRouge;
                     break;
             }
-            s << "[" << beginRouge << "*" << escapeRouge << "]";
-            */
-            s << "[" << carte->getPositionTableau(y, x) << "]";
+            s << "[" << taponnage << "]";
+            //s << "[" << carte->getPositionTableau(y, x) << "]";
         }
         s << std::endl;
     }
