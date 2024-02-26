@@ -11,10 +11,10 @@ int main()
 	joueur.push_back(new Joueur(10, 10));
 	
 	joueur[0]->ajouterBateau(2, 2, true, 4);
-	//joueur[1]->ajouterBateau(0, 0, true, 4);
+	joueur[1]->ajouterBateau(0, 0, true, 4);
 	Coordonnee pos = { 0,0};
 	
-	for (int i = 2; i < 8; i++)
+	for (int i = 0; i < 8; i++)
 	{
         pos.y = i;
 		joueur[0]->tirer(pos, joueur[1]);
