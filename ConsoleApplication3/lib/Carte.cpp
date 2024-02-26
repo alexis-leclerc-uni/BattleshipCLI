@@ -97,3 +97,11 @@ bool Carte::afficher()
 {
     return false;
 }
+
+int Carte::getPositionTableau(int y, int x) {
+    if (y <= tailleEnY && x <=tailleEnX)
+    {
+        return tableau[y][x];
+    }
+    return 0;
+}

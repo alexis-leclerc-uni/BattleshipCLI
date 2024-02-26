@@ -83,8 +83,41 @@ bool Joueur::ajouterBateau(int x, int y, bool horizontal, int taille)
 //Description : Afficher la carte du joueur
 //Entrée : Aucune entrée
 //Sortie : Retourne s'il a réussi à afficher la carte du joueur
-bool Joueur::afficher()
+bool Joueur::afficher(std::ostream& s)
 {
+    int sizeX, sizeY;
+    sizeX = carte->getTailleEnX();
+    sizeY = carte->getTailleEnY();
+
+    std::string beginRouge = "\033[31m";
+    std::string escapeRouge = "\033[0m";
+
+    std::string taponnage = "";
+
+
+    for (int y = 0; y < sizeY; y++)
+    {
+        for (int x = 0; x < sizeX; x++)
+        {
+            /*
+            switch (carte.getTableau()[y][x])
+            {
+                case 0:
+                    taponnage = " ";
+                    break;
+                case 1:
+                    taponnage = "*";
+                    break;
+                case 2:
+                    taponnage = beginRouge + "*" + escapeRouge;
+                    break;
+            }
+            s << "[" << beginRouge << "*" << escapeRouge << "]";
+            */
+            s << "[" << carte->getPositionTableau(y, x) << "]";
+        }
+        s << std::endl;
+    }
     return false;
 }
 //Description : Actualise la carte du joueur
