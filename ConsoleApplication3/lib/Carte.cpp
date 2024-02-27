@@ -6,12 +6,12 @@ Carte::Carte(int tailleEnX1, int tailleEnY1)
 {
     tailleEnX = tailleEnX1;
     tailleEnY = tailleEnY1;
-    tableau = new int* [tailleEnY];
-    for (int y = 0; y < tailleEnY; y++)
+    tableau = new int* [tailleEnX];
+    for (int x = 0; x < tailleEnX; x++)
     {
-        tableau[y] = new int[tailleEnX];
-        for (int x = 0; x < tailleEnX; x++)
-            tableau[y][x] = 0;
+        tableau[x] = new int[tailleEnY];
+        for (int y = 0; y < tailleEnY; y++)
+            tableau[x][y] = 0;
     }
     nbBateau = 0;
 }
@@ -20,7 +20,7 @@ Carte::Carte(int tailleEnX1, int tailleEnY1)
 //Sortie : Aucune Sortie
 Carte::~Carte()
 {
-    for (int i = 0; i < tailleEnY; i++)
+    for (int i = 0; i < tailleEnX; i++)
     {
         delete[] tableau[i];
     }
@@ -37,10 +37,10 @@ bool Carte::initialiserBateau(std::vector<Bateau*> bateau)
         {
             if (bateau[i]->getOrientation()) //On retranscrit le bateau sur la carte (Carte ne le sait pas => donné brut sans objet)
             {
-                tableau[bateau[i]->getCoordonnee().y][bateau[i]->getCoordonnee().x + j] = i + 3;
+                tableau[bateau[i]->getCoordonnee().x + j][bateau[i]->getCoordonnee().y] = i + 3;
             }
             else {
-                tableau[bateau[i]->getCoordonnee().y + j][bateau[i]->getCoordonnee().x] = i + 3;
+                tableau[bateau[i]->getCoordonnee().x][bateau[i]->getCoordonnee().y + j] = i + 3;
             }
         }
     }
@@ -60,13 +60,13 @@ int Carte::tirer(Coordonnee position)
     if (dejaTirer(position))
         return DEJATIRER;
 
-    int etatCase = tableau[position.y][position.x];
+    int etatCase = tableau[position.x][position.y];
     if (etatCase == MISS)
     {
-        tableau[position.y][position.x] = 1;
+        tableau[position.x][position.y] = 1;
         return MISS; //renvoie un MISS
     }
-    tableau[position.y][position.x] = 2;
+    tableau[position.x][position.y] = 2;
     return etatCase; //renvoie un HIT avec l'index du bateau + 3
 }
 //Description : Vérifie si le tire a déjà été fait
@@ -74,7 +74,7 @@ int Carte::tirer(Coordonnee position)
 //Sortie : Retourne Vrai si c'est déjà tirer, sinon faux
 bool Carte::dejaTirer(Coordonnee position)
 {
-    return (tableau[position.y][position.x] == 1 || tableau[position.y][position.x] == 2);
+    return (tableau[position.x][position.y] == 1 || tableau[position.x][position.y] == 2);
 }
 //Description : Retourne la taille en x de la carte
 //Entrée : Aucune entrée
@@ -101,7 +101,7 @@ bool Carte::afficher()
 int Carte::getPositionTableau(int y, int x) {
     if (y <= tailleEnY && x <=tailleEnX)
     {
-        return tableau[y][x];
+        return tableau[x][y];
     }
     return 0;
 }
