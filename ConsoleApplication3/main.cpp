@@ -12,16 +12,32 @@ int main()
 	
 	joueur[0]->ajouterBateau(2, 2, true, 4);
 	joueur[1]->ajouterBateau(0, 0, true, 4);
+	joueur[1]->ajouterBateau(5, 4, false, 5);
 	Coordonnee pos = { 0,0};
 	
 	for (int i = 0; i < 8; i++)
 	{
         pos.y = i;
 		joueur[0]->tirer(pos, joueur[1]);
-        std::cout << "Pos x :" <<  pos.x << "  Pos y : " << pos.y << std::endl;
+        //std::cout << "Pos x :" <<  pos.x << "  Pos y : " << pos.y << std::endl;
 	}
+    pos.y = 0;
+	for (int i = 0; i < 8; i++) {
+        pos.x = i;
+		joueur[0]->tirer(pos, joueur[1]);
+        //std::cout << "Pos x :" <<  pos.x << "  Pos y : " << pos.y << std::endl;
+	}
+
+    pos.x = 5;
+    pos.y = 4;
+
+    joueur[0]->tirer(pos, joueur[1]);
 	
-    joueur[1]->afficher(std::cout);
+    joueur[1]->afficherHistoriqueTir(std::cout);
+    std::cout << std::endl;
+    joueur[0]->afficherCarteBateau(std::cout);
+    std::cout << std::endl;
+    joueur[1]->afficherCarteBateau(std::cout);
 	std::cout << joueur[0]->aPerdu() << std::endl;
 	
 	delete joueur[0];
