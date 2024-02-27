@@ -83,39 +83,84 @@ bool Joueur::ajouterBateau(int x, int y, bool horizontal, int taille)
 //Description : Afficher la carte du joueur
 //Entrée : Aucune entrée
 //Sortie : Retourne s'il a réussi à afficher la carte du joueur
-bool Joueur::afficher(std::ostream& s)
+bool Joueur::afficherHistoriqueTir(std::ostream& s)
 {
     int sizeX, sizeY;
     sizeX = carte->getTailleEnX();
     sizeY = carte->getTailleEnY();
 
     std::string beginRouge = "\033[31m";
-    std::string escapeRouge = "\033[0m";
+    std::string beginGris = "\033[31m";
+    std::string escape= "\033[0m";
 
-    std::string taponnage = "";
+    std::string contenuCase = "";
 
 
     for (int y = 0; y < sizeY; y++)
     {
         for (int x = 0; x < sizeX; x++)
         {
-            switch (carte->getPositionTableau(y, x))
+            switch (this->tweaksAffichage(carte->getPositionTableau(y, x)))
             {
                 case 0:
-                    taponnage = " ";
+                    contenuCase = " ";
                     break;
                 case 1:
-                    taponnage = "*";
+                    contenuCase = "*";
                     break;
                 case 2:
-                    taponnage = beginRouge + "*" + escapeRouge;
+                    contenuCase = beginRouge + "*" + escape;
+                    break;
+                case 3:
+                    contenuCase = " ";
                     break;
             }
-            s << "[" << taponnage << "]";
+            s << "[" << contenuCase << "]";
             //s << "[" << carte->getPositionTableau(y, x) << "]";
         }
         s << std::endl;
     }
+    
+    return false;
+}
+bool Joueur::afficherCarteBateau(std::ostream& s)
+{
+    int sizeX, sizeY;
+    sizeX = carte->getTailleEnX();
+    sizeY = carte->getTailleEnY();
+
+    std::string beginRouge = "\033[31m";
+    std::string beginGris = "\033[38;5;214m";
+    std::string escape= "\033[0m";
+
+    std::string contenuCase = "";
+
+
+    for (int y = 0; y < sizeY; y++)
+    {
+        for (int x = 0; x < sizeX; x++)
+        {
+            switch (this->tweaksAffichage(carte->getPositionTableau(y, x)))
+            {
+                case 0:
+                    contenuCase = " ";
+                    break;
+                case 1:
+                    contenuCase = "*";
+                    break;
+                case 2:
+                    contenuCase = beginRouge + "*" + escape;
+                    break;
+                case 3:
+                    contenuCase = beginGris + "*" + escape;
+                    break;
+            }
+            s << "[" << contenuCase << "]";
+            //s << "[" << carte->getPositionTableau(y, x) << "]";
+        }
+        s << std::endl;
+    }
+    
     return false;
 }
 //Description : Actualise la carte du joueur
@@ -124,4 +169,11 @@ bool Joueur::afficher(std::ostream& s)
 bool Joueur::actualiseCarte()
 {
     return carte->initialiserBateau(bateau);
+}
+
+int Joueur::tweaksAffichage(int nombre) {
+    if (nombre > 2) {
+        return 3;
+    }
+    return nombre;
 }
