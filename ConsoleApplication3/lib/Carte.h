@@ -9,6 +9,9 @@
 #define MISS 0
 #define OUTOFBOUND 1
 #define DEJATIRER 2
+#define RIEN 1
+#define TOUCHEE 2
+#define SONDEE 3
 
 class Carte {
     public:
@@ -16,6 +19,7 @@ class Carte {
         ~Carte();
         bool initialiserBateau(std::vector<Bateau*> bateau);
         int tirer(Coordonnee position);
+        int sonder(Coordonnee position);
         bool dejaTirer(Coordonnee position);
         int getTailleEnX();
         int getTailleEnY();

@@ -7,6 +7,8 @@ Joueur::Joueur(int tailleEnX, int taillEnY)
     carte = new Carte(tailleEnX, taillEnY);
     chargement = -1;
     typeMissile = -1;
+    for (int i = 0; i < 5; i++)
+        typeAccepte[i] = true;
 }
 //Description : Déconstruteur d'une instance de Joueur
 //Entrée : Aucune entrée
@@ -63,6 +65,16 @@ int Joueur::tirer(Coordonnee position, Joueur* adversaire)
         return 3; //Erreur dans endommagerBateau
     return 0; // Le tout est réussi
 }
+//Description : Tirer permet d'envoyer un missile sur la carte de l'adversaire
+//Entrée : Prend la position du tir, le joueur adversaire
+//Sortie : Retourne si le tir est effectué (même si le tir n'est pas un hit, il retourne vrai)
+int Joueur::sonder(Coordonnee position, Joueur* adversaire)
+{
+    //S'il y a une erreur (déjà tirer ou Out Of Bound)
+    int etatCase = adversaire->carte->sonder(position);
+    //std::cout << "Etat Case = " << etatCase << std::endl;
+    return 0; // Le tout est réussi
+}
 //Description : La fonction permet d'installer un bateau sur la carte
 //Entrée : Prend la position, l'orientation et la taille
 //Sortie : Retourne si le bateau a été placé
@@ -98,7 +110,7 @@ bool Joueur::ajouterBateau(int x, int y, bool horizontal, int taille)
 //Description : Afficher la carte du joueur
 //Entrée : Aucune entrée
 //Sortie : Retourne s'il a réussi à afficher la carte du joueur
-bool Joueur::afficherHistoriqueTir(std::ostream& s)
+void Joueur::afficherHistoriqueTir(std::ostream& s)
 {
     int sizeX, sizeY;
     sizeX = carte->getTailleEnX();
@@ -127,6 +139,9 @@ bool Joueur::afficherHistoriqueTir(std::ostream& s)
                     contenuCase = beginRouge + "*" + escape;
                     break;
                 case 3:
+                    contenuCase = beginGris + "*" + escape;
+                    break;
+                case 4:
                     contenuCase = " ";
                     break;
             }
@@ -136,9 +151,9 @@ bool Joueur::afficherHistoriqueTir(std::ostream& s)
         s << std::endl;
     }
     
-    return false;
+    return;
 }
-bool Joueur::afficherCarteBateau(std::ostream& s)
+void Joueur::afficherCarteBateau(std::ostream& s)
 {
     int sizeX, sizeY;
     sizeX = carte->getTailleEnX();
@@ -167,6 +182,7 @@ bool Joueur::afficherCarteBateau(std::ostream& s)
                 contenuCase = beginRouge + "*" + escape;
                 break;
             case 3:
+            case 4:
                 contenuCase = beginGris + "*" + escape;
                 break;
             }
@@ -175,7 +191,7 @@ bool Joueur::afficherCarteBateau(std::ostream& s)
         }
         s << std::endl;
     }
-
+    return;
 }
 int Joueur::getChargement()
 {
@@ -193,10 +209,14 @@ int Joueur::getTypeMissile()
 {
     return typeMissile;
 }
-void Joueur::setTypeMissile(int type)
+bool Joueur::setTypeMissile(int type)
 {
-    typeMissile = type;
-    return;
+    if (0 < type && type <= 5 && typeAccepte[type - 1])
+    {
+        typeMissile = type;
+        return true;
+    }
+    return false;
 }
 Coordonnee Joueur::getCordAttente()
 {
@@ -217,8 +237,13 @@ bool Joueur::actualiseCarte()
 }
 
 int Joueur::tweaksAffichage(int nombre) {
-    if (nombre > 2) {
-        return 3;
+    if (nombre > 3) {
+        return 4;
     }
     return nombre;
+}
+
+bool* Joueur::getTypeAccepte()
+{
+    return typeAccepte;
 }

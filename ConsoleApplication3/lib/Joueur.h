@@ -18,22 +18,25 @@ class Joueur {
         bool aPerdu();
         int nBateau();
         int tirer(Coordonnee position, Joueur* adversaire);
+        int sonder(Coordonnee position, Joueur* adversaire);
         bool ajouterBateau(int x, int y, bool horizontal, int taille);
         int getChargement();
         void setChargement(int);
         int getTypeMissile();
-        void setTypeMissile(int);
+        bool setTypeMissile(int);
         Coordonnee getCordAttente();
         void setCordAttente(Coordonnee);
-        bool afficherHistoriqueTir(std::ostream& s);
-        bool afficherCarteBateau(std::ostream& s);
+        void afficherHistoriqueTir(std::ostream& s);
+        void afficherCarteBateau(std::ostream& s);
         bool actualiseCarte();
+        bool* getTypeAccepte();
     private:
         std::vector<Bateau*> bateau;
         Carte *carte;
         int chargement;
         int typeMissile;
         Coordonnee cordAttente;
+        bool typeAccepte[5];
         int tweaksAffichage(int nombre);
 
 };

@@ -46,7 +46,7 @@ int main()
 	delete joueur[1];
 	return 0;	
     */
-    std::ifstream myFile("lib/Test.txt", std::ios_base::in);
+    //std::ifstream myFile("lib/Test.txt", std::ios_base::in);
     Jeu jeu;
     int reponse;
     while ((reponse = jeu.menuStartUp(std::cout, std::cin)) == INCORRECT) {}
@@ -54,6 +54,10 @@ int main()
         return 0;
     //Le joueur commence
     do {
+        do {
+            std::cout << "Écriver votre mode : ";
+            std::cin >> reponse;
+        } while (reponse <= 0 && reponse > 3);
         //jeu.menuReglage(std::cout, myFile);
         jeu.menuReglage(std::cout, std::cin);
         jeu.ajouterJoueur();
@@ -62,22 +66,27 @@ int main()
         jeu.menuInitJoueur(std::cout, std::cin, jeu.getJoueur(0)); // Joueur 1 place ses bateaux
         //jeu.menuInitJoueur(std::cout, myFile, jeu.getJoueur(1)); // Joueur 2 place ses bateaux
         jeu.menuInitJoueur(std::cout, std::cin, jeu.getJoueur(1)); // Joueur 2 place ses bateaux
-        
-        
-        while (!jeu.getJoueur(0)->aPerdu())
-        {
-            //jeu.menuTir(std::cout, myFile, jeu.getJoueur(0), jeu.getJoueur(1));
-            jeu.menuTir(std::cout, std::cin, jeu.getJoueur(0), jeu.getJoueur(1));
-            if (jeu.getJoueur(1)->aPerdu())
-                break;
-            //jeu.menuTir(std::cout, myFile, jeu.getJoueur(1), jeu.getJoueur(0));
-            jeu.menuTir(std::cout, std::cin, jeu.getJoueur(1), jeu.getJoueur(0));
+        do {
+            std::cout << "Écriver votre mode : ";
+            std::cin >> reponse;
+        } while (reponse <= 0 && reponse > 3);
+        switch (reponse) {
+        case MODE_NORMAL:
+            jeu.menuJeuNormal(std::cout, std::cin);
+            break;
+        case MODE_RAFALE:
+            jeu.menuJeuRafale(std::cout, std::cin);
+            break;
+        case MODE_STRATEGIE:
+            jeu.menuJeuStrategique(std::cout, std::cin);
+            break;
         }
+        
         while ((reponse = jeu.menuFin(std::cout, std::cin)) == INCORRECT) {}
         if (reponse == QUITTER)
             return 0;
     } while (true);
-    myFile.close();
+    //myFile.close();
     //Écrire la base
     
     return 0;

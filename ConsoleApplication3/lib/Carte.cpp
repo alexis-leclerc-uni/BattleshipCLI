@@ -37,10 +37,10 @@ bool Carte::initialiserBateau(std::vector<Bateau*> bateau)
         {
             if (bateau[i]->getOrientation()) //On retranscrit le bateau sur la carte (Carte ne le sait pas => donné brut sans objet)
             {
-                tableau[bateau[i]->getCoordonnee().x + j][bateau[i]->getCoordonnee().y] = i + 3;
+                tableau[bateau[i]->getCoordonnee().x + j][bateau[i]->getCoordonnee().y] = i + 4;
             }
             else {
-                tableau[bateau[i]->getCoordonnee().x][bateau[i]->getCoordonnee().y + j] = i + 3;
+                tableau[bateau[i]->getCoordonnee().x][bateau[i]->getCoordonnee().y + j] = i + 4;
             }
         }
     }
@@ -52,8 +52,6 @@ bool Carte::initialiserBateau(std::vector<Bateau*> bateau)
 //Sortie : Retourne la taille en Y de la carte
 int Carte::tirer(Coordonnee position)
 {
-
-
     if (position.x < 0 || position.x >= tailleEnX || position.y < 0 || position.y >= tailleEnY)
         return OUTOFBOUND;
 
@@ -63,11 +61,31 @@ int Carte::tirer(Coordonnee position)
     int etatCase = tableau[position.x][position.y];
     if (etatCase == MISS)
     {
-        tableau[position.x][position.y] = 1;
+        tableau[position.x][position.y] = RIEN;
         return MISS; //renvoie un MISS
     }
-    tableau[position.x][position.y] = 2;
+    tableau[position.x][position.y] = TOUCHEE;
     return etatCase; //renvoie un HIT avec l'index du bateau + 3
+}
+//Description : Retourne la taille en Y de la carte
+//Entrée : Aucune entrée
+//Sortie : Retourne la taille en Y de la carte
+int Carte::sonder(Coordonnee position)
+{
+    if (position.x < 0 || position.x >= tailleEnX || position.y < 0 || position.y >= tailleEnY)
+        return OUTOFBOUND;
+
+    if (dejaTirer(position))
+        return DEJATIRER;
+
+    int etatCase = tableau[position.x][position.y];
+    if (etatCase == MISS)
+    {
+        tableau[position.x][position.y] = RIEN;
+        return MISS; //renvoie un MISS
+    }
+    tableau[position.x][position.y] = SONDEE;
+    return etatCase; //renvoie un HIT avec l'index du bateau + 4
 }
 //Description : Vérifie si le tire a déjà été fait
 //Entrée : Prend la position du tir

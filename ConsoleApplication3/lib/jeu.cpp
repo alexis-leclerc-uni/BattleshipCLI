@@ -136,6 +136,11 @@ int Jeu::menuInitJoueur(std::ostream& sout, std::istream& sin,Joueur* joueur)
 int Jeu::menuJeuNormal(std::ostream& sout, std::istream& sin)
 {
     //On a droit a tous les types de missile au début (à pars la bombe), Une action à la fois
+    for (int i = 0; i < 2; i++)
+    {
+        bool* type = vecJoueur[i]->getTypeAccepte();
+        type[4] = false;
+    }
     while (vecJoueur[0]->aPerdu())
     {
         menuTir(sout, sin, vecJoueur[0], vecJoueur[1]);
@@ -153,6 +158,11 @@ int Jeu::menuJeuNormal(std::ostream& sout, std::istream& sin)
 int Jeu::menuJeuRafale(std::ostream& sout, std::istream& sin)
 {
     //On a droit seulement au missile normal, mais on en a plus au fil du jeu
+    for (int i = 0; i < 2; i++)
+    {
+        bool* type = vecJoueur[i]->getTypeAccepte();
+        type[1] = false; type[2] = false; type[3] = false; type[4] = false;
+    }
     while (vecJoueur[0]->aPerdu())
     {
         for (int i = 0; i < 6 - vecJoueur[0]->nBateau(); i++)
@@ -187,13 +197,23 @@ int Jeu::menuJeuStrategique(std::ostream& sout, std::istream& sin)
     *   - missile colonne/ligne (2 tours pour charger)
     
     */
+    for (int i = 0; i < 2; i++)
+    {
+        bool* type = vecJoueur[i]->getTypeAccepte();
+        type[4] = false;
+    }
     while (vecJoueur[0]->aPerdu())
     {        
         menuTir(sout, sin, vecJoueur[0], vecJoueur[1]);
+        if (vecJoueur[0]->nBateau() == 2)
+            vecJoueur[0]->getTypeAccepte()[4] = true;
+        
         //jeu.menuTir(std::cout, std::cin, jeu.getJoueur(0), jeu.getJoueur(1));
         if (vecJoueur[1]->aPerdu())
             break;
         menuTir(sout, sin, vecJoueur[1], vecJoueur[0]);
+        if (vecJoueur[1]->nBateau() == 2)
+            vecJoueur[1]->getTypeAccepte()[4] = true;
         //jeu.menuTir(std::cout, std::cin, jeu.getJoueur(1), jeu.getJoueur(0));
     }
     return CONFIRMER;
@@ -231,7 +251,7 @@ bool Jeu::afficherTir2(std::ostream& sout, Joueur* joueur, Joueur* adversaire)
 int Jeu::menuTir(std::ostream& sout, std::istream& sin,Joueur* joueur, Joueur* adversaire)
 {
     Coordonnee cord = {-1,-1};
-    int reponse;
+    int reponse = 1;
     do {
         if (joueur->getChargement() > 0)
         {
@@ -277,10 +297,11 @@ int Jeu::menuTir(std::ostream& sout, std::istream& sin,Joueur* joueur, Joueur* a
 
         }
         //Déterminer le type de Missile
-        afficherTir1(sout, joueur, adversaire);
         int type;
-        sin >> type;
-        joueur->setTypeMissile(type);
+        do {
+            afficherTir1(sout, joueur, adversaire);
+            sin >> type;
+        } while (!joueur->setTypeMissile(type));
         afficherTir2(sout, joueur, adversaire);
         sin >> cord.x >> cord.y;
         switch (type)
@@ -293,18 +314,26 @@ int Jeu::menuTir(std::ostream& sout, std::istream& sin,Joueur* joueur, Joueur* a
         case M_SONDE:
             
             //La sonde géographique
-            joueur->tirer(cord, adversaire);
+            joueur->sonder(cord, adversaire);
             --cord.x;
-            joueur->tirer(cord, adversaire);
+            joueur->sonder(cord, adversaire);
             ++cord.x; --cord.y;
-            joueur->tirer(cord, adversaire);
+            joueur->sonder(cord, adversaire);
             ++cord.x; ++cord.y;
-            joueur->tirer(cord, adversaire);
+            joueur->sonder(cord, adversaire);
             --cord.x; ++cord.y;
-            joueur->tirer(cord, adversaire);
+            joueur->sonder(cord, adversaire);
+            break;
+        case M_LIGNE:
+        case M_COLONNE:
+        case M_BOMBE:
+            if (joueur->nBateau() >= 2)
+                joueur->setChargement(3);
+            else
+                joueur->setChargement(2);
             break;
         }
-        reponse = joueur->tirer(cord, adversaire);
+        
     } while (reponse == 1 || reponse == 2);
     return false;
 }
