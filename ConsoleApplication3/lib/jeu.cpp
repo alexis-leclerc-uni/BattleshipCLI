@@ -42,7 +42,7 @@ int Jeu::menuStartUp(std::ostream& sout, std::istream& sin)
 bool Jeu::afficherReglage(std::ostream& sout)
 {
     sout << "C'est le temps des reglages" << std::endl;
-    return false;
+    return true;
 }
 //Description : Afficher le menu de réglage (demande la taille en X)
 //Entrée : un canal de communication
@@ -50,7 +50,7 @@ bool Jeu::afficherReglage(std::ostream& sout)
 bool Jeu::afficherTailleEnX(std::ostream& sout)
 {
     sout << "Inscrivez la taille en X : ";
-    return false;
+    return true;
 }
 //Description : Afficher le menu de réglage (demande la taille en Y)
 //Entrée : un canal de communication
@@ -58,11 +58,23 @@ bool Jeu::afficherTailleEnX(std::ostream& sout)
 bool Jeu::afficherTailleEnY(std::ostream& sout)
 {
     sout << "Inscrivez la taille en Y : ";
-    return false;
+    return true;
+}
+//Description : Afficher le menu de réglage (demande la taille en Y)
+//Entrée : un canal de communication
+//Sortie : Vrai si ça affiche
+bool afficherMode(std::ostream& sout)
+{
+    sout << "Inscrivez le mode de jeu choisi :" << std::endl;
+    sout << "1 : Mode normal" << std::endl;
+    sout << "2 : Mode rafale" << std::endl;
+    sout << "3 : Mode stratégique" << std::endl;
+    sout << "Votre choix : ";
+    return true;
 }
 //Description : Demande au joueur la taille de la carte
 //Entrée : un canal de communication
-//Sortie : 0 pour Confirmer la taille choisie, 1 pour revenir en arrière
+//Sortie : Renvoie CONFIRMER (0)
 int Jeu::menuReglage(std::ostream& sout, std::istream& sin)
 {
     afficherReglage(sout);
@@ -74,6 +86,10 @@ int Jeu::menuReglage(std::ostream& sout, std::istream& sin)
         afficherTailleEnY(sout);
         sin >> tailleEnY;
     } while (tailleEnY <= 0);
+    do {
+        afficherMode(sout);
+        sin >> mode;
+    } while (mode <= 0);
 
     return CONFIRMER;
 }
@@ -110,6 +126,14 @@ int Jeu::menuInitJoueur(std::ostream& sout, std::istream& sin,Joueur* joueur)
         } while (!joueur->ajouterBateau(x,y,horizontal,tailleBateau[i]));
         
     }
+    return CONFIRMER;
+}
+//Description : renvoie dans le bon mode de jeu
+//Entrée : un canal de communication
+//Sortie : 0 pour Confirmer 
+int menuJeuMode(std::ostream& sout, std::istream& sin)
+{
+
     return CONFIRMER;
 }
 //Description : Afficher le menu pour que le joueur tir sur l'adversaire
