@@ -5,7 +5,7 @@
 
 class Bateau {
     public:
-        Bateau(int x, int y, bool orientation, int taille);
+        Bateau(int x = -1, int y = -1, bool orientation = true, int taille = 1);
         ~Bateau();
         bool getCoule();
         bool endommagerBateau(Coordonnee position);

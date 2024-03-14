@@ -1,6 +1,7 @@
 #ifndef CARTE
 #define CARTE
 #include <vector>
+#include <iostream>
 #include "Bateau.h"
 #include "Coordonnee.h"
 
@@ -19,6 +20,7 @@ class Carte {
         int getTailleEnX();
         int getTailleEnY();
         bool afficher();
+        int getPositionTableau(int y, int x);
 
     private:
         int* *tableau;

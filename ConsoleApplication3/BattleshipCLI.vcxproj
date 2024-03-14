@@ -43,7 +43,9 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset Condition="'$(VisualStudioVersion)' == '15.0'">v141</PlatformToolset>
+    <PlatformToolset Condition="'$(VisualStudioVersion)' == '16.0'">v142</PlatformToolset>
+    <PlatformToolset Condition="'$(VisualStudioVersion)' == '17.0'">v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
@@ -128,16 +130,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\P13-Battleship\Bateau.cpp" />
-    <ClCompile Include="..\..\P13-Battleship\Carte.cpp" />
+    <ClCompile Include="lib\Bateau.cpp" />
+    <ClCompile Include="lib\Carte.cpp" />
     <ClCompile Include="lib\jeu.cpp" />
     <ClCompile Include="lib\Joueur.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\P13-Battleship\Bateau.h" />
-    <ClInclude Include="..\..\P13-Battleship\Carte.h" />
-    <ClInclude Include="..\..\P13-Battleship\Coordonnee.h" />
+    <ClInclude Include="lib\Bateau.h" />
+    <ClInclude Include="lib\Carte.h" />
+    <ClInclude Include="lib\Coordonnee.h" />
     <ClInclude Include="lib\jeu.h" />
     <ClInclude Include="lib\Joueur.h" />
   </ItemGroup>

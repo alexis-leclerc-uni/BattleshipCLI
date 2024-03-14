@@ -6,51 +6,83 @@
 
 int main()
 {
-	/*
+    /*
 	std::vector<Joueur*> joueur;
 	joueur.push_back(new Joueur(10, 10));
 	joueur.push_back(new Joueur(10, 10));
 	
 	joueur[0]->ajouterBateau(2, 2, true, 4);
-	joueur[1]->ajouterBateau(2, 2, true, 4);
-	Coordonnee pos = { 2,2 };
+	joueur[1]->ajouterBateau(0, 0, true, 4);
+	joueur[1]->ajouterBateau(5, 4, false, 5);
+	Coordonnee pos = { 0,0};
 	
-	for (int i = 0; i < 4; i++)
+    joueur[1]->afficherCarteBateau(std::cout);
+	for (int i = 0; i < 8; i++)
 	{
-		std::cout << "Tirer = " << joueur[1]->tirer(pos, joueur[0]) << std::endl;
-		pos.x += 1;
+        pos.y = i;
+		joueur[0]->tirer(pos, joueur[1]);
+        //std::cout << "Pos x :" <<  pos.x << "  Pos y : " << pos.y << std::endl;
 	}
+    pos.y = 0;
+	for (int i = 0; i < 8; i++) {
+        pos.x = i;
+		joueur[0]->tirer(pos, joueur[1]);
+        //std::cout << "Pos x :" <<  pos.x << "  Pos y : " << pos.y << std::endl;
+	}
+
+    pos.x = 5;
+    pos.y = 4;
+
+    joueur[0]->tirer(pos, joueur[1]);
 	
+    joueur[1]->afficherHistoriqueTir(std::cout);
+    std::cout << std::endl;
+    joueur[0]->afficherCarteBateau(std::cout);
+    std::cout << std::endl;
+    joueur[1]->afficherCarteBateau(std::cout);
 	std::cout << joueur[0]->aPerdu() << std::endl;
 	
 	delete joueur[0];
 	delete joueur[1];
 	return 0;	
-	*/
+    */
     std::ifstream myFile("lib/Test.txt", std::ios_base::in);
     Jeu jeu;
     int reponse;
-    while ((reponse = jeu.menuStartUp(std::cout, myFile)) == INCORRECT) {}
+    while ((reponse = jeu.menuStartUp(std::cout, std::cin)) == INCORRECT) {}
     if (reponse == QUITTER)
         return 0;
     //Le joueur commence
     do {
-        jeu.menuReglage(std::cout, myFile);
-        //jeu.menuReglage(std::cout, std::cin);
+        //jeu.menuReglage(std::cout, myFile);
+        jeu.menuReglage(std::cout, std::cin);
         jeu.ajouterJoueur();
         jeu.ajouterJoueur();
-        jeu.menuInitJoueur(std::cout, myFile, jeu.getJoueur(0)); // Joueur 1 place ses bateaux
-        //jeu.menuInitJoueur(std::cout, std::cin, jeu.getJoueur(0)); // Joueur 1 place ses bateaux
-        jeu.menuInitJoueur(std::cout, myFile, jeu.getJoueur(1)); // Joueur 2 place ses bateaux
-        //jeu.menuInitJoueur(std::cout, std::cin, jeu.getJoueur(1)); // Joueur 2 place ses bateaux
+        //jeu.menuInitJoueur(std::cout, myFile, jeu.getJoueur(0)); // Joueur 1 place ses bateaux
+        jeu.menuInitJoueur(std::cout, std::cin, jeu.getJoueur(0)); // Joueur 1 place ses bateaux
+        //jeu.menuInitJoueur(std::cout, myFile, jeu.getJoueur(1)); // Joueur 2 place ses bateaux
+        jeu.menuInitJoueur(std::cout, std::cin, jeu.getJoueur(1)); // Joueur 2 place ses bateaux
         
+<<<<<<< HEAD
         
+=======
+        while (!jeu.getJoueur(0)->aPerdu())
+        {
+            //jeu.menuTir(std::cout, myFile, jeu.getJoueur(0), jeu.getJoueur(1));
+            jeu.menuTir(std::cout, std::cin, jeu.getJoueur(0), jeu.getJoueur(1));
+            if (jeu.getJoueur(1)->aPerdu())
+                break;
+            //jeu.menuTir(std::cout, myFile, jeu.getJoueur(1), jeu.getJoueur(0));
+            jeu.menuTir(std::cout, std::cin, jeu.getJoueur(1), jeu.getJoueur(0));
+        }
+>>>>>>> master
         while ((reponse = jeu.menuFin(std::cout, std::cin)) == INCORRECT) {}
         if (reponse == QUITTER)
             return 0;
     } while (true);
     myFile.close();
     //Écrire la base
+    
     return 0;
 }
 

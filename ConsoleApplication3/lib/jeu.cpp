@@ -19,6 +19,7 @@ Jeu::~Jeu()
 //Sortie : Vrai si ça affiche
 bool Jeu::afficherStartUp(std::ostream& sout)
 {
+    sout << "Bienvenue au Battleship" << std::endl;
     sout << "Continuer? Y/N" << std::endl;
     return false;
 }
@@ -118,8 +119,9 @@ int Jeu::menuInitJoueur(std::ostream& sout, std::istream& sin,Joueur* joueur)
     int tailleBateau[] = {5,4,3,3,2};
     int x = -1; int y = -1;
     bool horizontal;
-    for (int i = 0; i < 5; i++)
+    for (int i = 0; i < 3; i++)
     {
+        joueur->afficherCarteBateau(sout);
         do {
             afficherInitTaille(sout, joueur, tailleBateau[i]);
             sin >> x >> y >> horizontal;
@@ -201,6 +203,7 @@ int Jeu::menuJeuStrategique(std::ostream& sout, std::istream& sin)
 //Sortie : Vrai si ça affiche
 bool Jeu::afficherTir1(std::ostream& sout, Joueur *joueur, Joueur *adversaire)
 {
+    adversaire->afficherHistoriqueTir(sout);
     if (vecJoueur[0] == joueur)
         sout << "Joueur 1 : " << std::endl;
     else
