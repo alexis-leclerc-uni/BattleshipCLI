@@ -98,44 +98,7 @@ bool Joueur::ajouterBateau(int x, int y, bool horizontal, int taille)
 //Description : Afficher la carte du joueur
 //Entrée : Aucune entrée
 //Sortie : Retourne s'il a réussi à afficher la carte du joueur
-<<<<<<< HEAD
-int Joueur::getChargement()
-{
-    return chargement;
-}
-//Description : passe le tour s'il est en chargement
-//Entrée : Aucune entrée
-//Sortie : Aucune sortie
-void Joueur::setChargement(int charge)
-{
-    chargement = charge;
-    return;
-}
-int Joueur::getTypeMissile()
-{
-    return typeMissile;
-}
-void Joueur::setTypeMissile(int type)
-{
-    typeMissile = type;
-    return;
-}
-Coordonnee Joueur::getCordAttente()
-{
-    return cordAttente;
-}
-void Joueur::setCordAttente(Coordonnee cord)
-{
-    cordAttente = cord;
-    return;
-}
-//Description : Afficher la carte du joueur
-//Entrée : Aucune entrée
-//Sortie : Retourne s'il a réussi à afficher la carte du joueur
-bool Joueur::afficher()
-=======
 bool Joueur::afficherHistoriqueTir(std::ostream& s)
->>>>>>> master
 {
     int sizeX, sizeY;
     sizeX = carte->getTailleEnX();
@@ -183,7 +146,7 @@ bool Joueur::afficherCarteBateau(std::ostream& s)
 
     std::string beginRouge = "\033[31m";
     std::string beginGris = "\033[38;5;214m";
-    std::string escape= "\033[0m";
+    std::string escape = "\033[0m";
 
     std::string contenuCase = "";
 
@@ -194,27 +157,57 @@ bool Joueur::afficherCarteBateau(std::ostream& s)
         {
             switch (this->tweaksAffichage(carte->getPositionTableau(y, x)))
             {
-                case 0:
-                    contenuCase = " ";
-                    break;
-                case 1:
-                    contenuCase = "*";
-                    break;
-                case 2:
-                    contenuCase = beginRouge + "*" + escape;
-                    break;
-                case 3:
-                    contenuCase = beginGris + "*" + escape;
-                    break;
+            case 0:
+                contenuCase = " ";
+                break;
+            case 1:
+                contenuCase = "*";
+                break;
+            case 2:
+                contenuCase = beginRouge + "*" + escape;
+                break;
+            case 3:
+                contenuCase = beginGris + "*" + escape;
+                break;
             }
             s << "[" << contenuCase << "]";
             //s << "[" << carte->getPositionTableau(y, x) << "]";
         }
         s << std::endl;
     }
-    
-    return false;
+
 }
+int Joueur::getChargement()
+{
+    return chargement;
+}
+//Description : passe le tour s'il est en chargement
+//Entrée : Aucune entrée
+//Sortie : Aucune sortie
+void Joueur::setChargement(int charge)
+{
+    chargement = charge;
+    return;
+}
+int Joueur::getTypeMissile()
+{
+    return typeMissile;
+}
+void Joueur::setTypeMissile(int type)
+{
+    typeMissile = type;
+    return;
+}
+Coordonnee Joueur::getCordAttente()
+{
+    return cordAttente;
+}
+void Joueur::setCordAttente(Coordonnee cord)
+{
+    cordAttente = cord;
+    return;
+}
+
 //Description : Actualise la carte du joueur
 //Entrée : Aucune entrée
 //Sortie : Retourne un bool (vrai si l'opération est réussie)
