@@ -5,6 +5,8 @@
 Joueur::Joueur(int tailleEnX, int taillEnY)
 {
     carte = new Carte(tailleEnX, taillEnY);
+    chargement = -1;
+    typeMissile = -1;
 }
 //Description : Déconstruteur d'une instance de Joueur
 //Entrée : Aucune entrée
@@ -28,6 +30,19 @@ bool Joueur::aPerdu()
             return false;
     }
     return true;
+}
+//Description : Retourne le nombre de bateau
+//Entrée : Aucune entrée
+//Sortie : Retourne le nombre de bateau
+int Joueur::nBateau()
+{
+    int total = 0;
+    for (int i = 0; i < bateau.size(); i++)
+    {
+        if (!bateau[i]->getCoule()) // Il en faut au moins un bateau vivant
+            total += 1;
+    }
+    return total;
 }
 //Description : Tirer permet d'envoyer un missile sur la carte de l'adversaire
 //Entrée : Prend la position du tir, le joueur adversaire
@@ -79,6 +94,39 @@ bool Joueur::ajouterBateau(int x, int y, bool horizontal, int taille)
     bateau.push_back(new Bateau(x, y, horizontal, taille));
     actualiseCarte();
     return true;
+}
+//Description : Afficher la carte du joueur
+//Entrée : Aucune entrée
+//Sortie : Retourne s'il a réussi à afficher la carte du joueur
+int Joueur::getChargement()
+{
+    return chargement;
+}
+//Description : passe le tour s'il est en chargement
+//Entrée : Aucune entrée
+//Sortie : Aucune sortie
+void Joueur::setChargement(int charge)
+{
+    chargement = charge;
+    return;
+}
+int Joueur::getTypeMissile()
+{
+    return typeMissile;
+}
+void Joueur::setTypeMissile(int type)
+{
+    typeMissile = type;
+    return;
+}
+Coordonnee Joueur::getCordAttente()
+{
+    return cordAttente;
+}
+void Joueur::setCordAttente(Coordonnee cord)
+{
+    cordAttente = cord;
+    return;
 }
 //Description : Afficher la carte du joueur
 //Entrée : Aucune entrée

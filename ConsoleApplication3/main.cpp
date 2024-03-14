@@ -44,15 +44,7 @@ int main()
         jeu.menuInitJoueur(std::cout, myFile, jeu.getJoueur(1)); // Joueur 2 place ses bateaux
         //jeu.menuInitJoueur(std::cout, std::cin, jeu.getJoueur(1)); // Joueur 2 place ses bateaux
         
-        while (!jeu.getJoueur(0)->aPerdu())
-        {
-            jeu.menuTir(std::cout, myFile, jeu.getJoueur(0), jeu.getJoueur(1));
-            //jeu.menuTir(std::cout, std::cin, jeu.getJoueur(0), jeu.getJoueur(1));
-            if (jeu.getJoueur(1)->aPerdu())
-                break;
-            jeu.menuTir(std::cout, myFile, jeu.getJoueur(1), jeu.getJoueur(0));
-            //jeu.menuTir(std::cout, std::cin, jeu.getJoueur(1), jeu.getJoueur(0));
-        }
+        
         while ((reponse = jeu.menuFin(std::cout, std::cin)) == INCORRECT) {}
         if (reponse == QUITTER)
             return 0;

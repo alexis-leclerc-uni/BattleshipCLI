@@ -22,11 +22,14 @@ class Jeu {
         bool afficherTailleEnY(std::ostream& sout);
         bool afficherMode(std::ostream& sout);
         int menuReglage(std::ostream& sout, std::istream& sin);
-        int menuJeuMode(std::ostream& sout, std::istream& sin);
+        int menuJeuNormal(std::ostream& sout, std::istream& sin);
+        int menuJeuRafale(std::ostream& sout, std::istream& sin);
+        int menuJeuStrategique(std::ostream& sout, std::istream& sin);
         bool afficherInitJoueur(std::ostream& sout, Joueur *joueur);
         bool afficherInitTaille(std::ostream& sout, Joueur *joueur, int taille);
         int menuInitJoueur(std::ostream& sout, std::istream& sin,Joueur* joueur);
-        bool afficherTir(std::ostream& sout, Joueur *joueur, Joueur *adversaire);
+        bool afficherTir1(std::ostream& sout, Joueur *joueur, Joueur *adversaire);
+        bool afficherTir2(std::ostream& sout, Joueur* joueur, Joueur* adversaire);
         int menuTir(std::ostream& sout, std::istream& sin,Joueur* joueur, Joueur* adversaire);
         bool afficherFin(std::ostream& sout);
         int menuFin(std::ostream& sout, std::istream& sin);
