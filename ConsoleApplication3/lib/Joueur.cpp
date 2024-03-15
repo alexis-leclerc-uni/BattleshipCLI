@@ -59,7 +59,7 @@ int Joueur::tirer(Coordonnee position, Joueur* adversaire)
     if (etatCase == MISS)
         return MISS;
     //Le tir est réussi
-    etatCase -= 3; // pour obtenir l'index du bateau
+    etatCase -= 4; // pour obtenir l'index du bateau
 
     if (adversaire->bateau[etatCase]->endommagerBateau(position))
         return 3; //Erreur dans endommagerBateau
@@ -117,8 +117,8 @@ void Joueur::afficherHistoriqueTir(std::ostream& s)
     sizeY = carte->getTailleEnY();
 
     std::string beginRouge = "\033[31m";
-    std::string beginGris = "\033[31m";
-    std::string escape= "\033[0m";
+    std::string beginGris = "\033[38;5;214m";
+    std::string escape = "\033[0m";
 
     std::string contenuCase = "";
 
@@ -141,6 +141,7 @@ void Joueur::afficherHistoriqueTir(std::ostream& s)
                 case 3:
                     contenuCase = beginGris + "*" + escape;
                     break;
+                
                 case 4:
                     contenuCase = " ";
                     break;

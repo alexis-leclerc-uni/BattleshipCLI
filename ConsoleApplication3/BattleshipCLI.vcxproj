@@ -143,9 +143,6 @@
     <ClInclude Include="lib\jeu.h" />
     <ClInclude Include="lib\Joueur.h" />
   </ItemGroup>
-  <ItemGroup>
-    <Text Include="lib\Test.txt" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

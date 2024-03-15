@@ -54,10 +54,6 @@ int main()
         return 0;
     //Le joueur commence
     do {
-        do {
-            std::cout << "Écriver votre mode : ";
-            std::cin >> reponse;
-        } while (reponse <= 0 && reponse > 3);
         //jeu.menuReglage(std::cout, myFile);
         jeu.menuReglage(std::cout, std::cin);
         jeu.ajouterJoueur();
@@ -66,11 +62,7 @@ int main()
         jeu.menuInitJoueur(std::cout, std::cin, jeu.getJoueur(0)); // Joueur 1 place ses bateaux
         //jeu.menuInitJoueur(std::cout, myFile, jeu.getJoueur(1)); // Joueur 2 place ses bateaux
         jeu.menuInitJoueur(std::cout, std::cin, jeu.getJoueur(1)); // Joueur 2 place ses bateaux
-        do {
-            std::cout << "Écriver votre mode : ";
-            std::cin >> reponse;
-        } while (reponse <= 0 && reponse > 3);
-        switch (reponse) {
+        switch (jeu.getMode()) {
         case MODE_NORMAL:
             jeu.menuJeuNormal(std::cout, std::cin);
             break;

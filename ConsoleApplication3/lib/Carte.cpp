@@ -65,7 +65,7 @@ int Carte::tirer(Coordonnee position)
         return MISS; //renvoie un MISS
     }
     tableau[position.x][position.y] = TOUCHEE;
-    return etatCase; //renvoie un HIT avec l'index du bateau + 3
+    return etatCase; //renvoie un HIT avec l'index du bateau + 4
 }
 //Description : Retourne la taille en Y de la carte
 //Entrée : Aucune entrée

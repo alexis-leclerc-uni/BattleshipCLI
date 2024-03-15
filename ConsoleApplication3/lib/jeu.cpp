@@ -64,7 +64,7 @@ bool Jeu::afficherTailleEnY(std::ostream& sout)
 //Description : Afficher le menu de réglage (demande la taille en Y)
 //Entrée : un canal de communication
 //Sortie : Vrai si ça affiche
-bool afficherMode(std::ostream& sout)
+bool Jeu::afficherMode(std::ostream& sout)
 {
     sout << "Inscrivez le mode de jeu choisi :" << std::endl;
     sout << "1 : Mode normal" << std::endl;
@@ -80,6 +80,10 @@ int Jeu::menuReglage(std::ostream& sout, std::istream& sin)
 {
     afficherReglage(sout);
     do {
+        afficherMode(sout);
+        sin >> mode;
+    } while (mode <= 0 || mode > 3);
+    do {
         afficherTailleEnX(sout);
         sin >> tailleEnX;
     } while (tailleEnX <= 0);
@@ -87,10 +91,7 @@ int Jeu::menuReglage(std::ostream& sout, std::istream& sin)
         afficherTailleEnY(sout);
         sin >> tailleEnY;
     } while (tailleEnY <= 0);
-    do {
-        afficherMode(sout);
-        sin >> mode;
-    } while (mode <= 0 || mode > 3);
+    
 
     return CONFIRMER;
 }
@@ -119,7 +120,7 @@ int Jeu::menuInitJoueur(std::ostream& sout, std::istream& sin,Joueur* joueur)
     int tailleBateau[] = {5,4,3,3,2};
     int x = -1; int y = -1;
     bool horizontal;
-    for (int i = 0; i < 3; i++)
+    for (int i = 0; i < 5; i++)
     {
         joueur->afficherCarteBateau(sout);
         do {
@@ -141,7 +142,7 @@ int Jeu::menuJeuNormal(std::ostream& sout, std::istream& sin)
         bool* type = vecJoueur[i]->getTypeAccepte();
         type[4] = false;
     }
-    while (vecJoueur[0]->aPerdu())
+    while (!vecJoueur[0]->aPerdu())
     {
         menuTir(sout, sin, vecJoueur[0], vecJoueur[1]);
         //jeu.menuTir(std::cout, std::cin, jeu.getJoueur(0), jeu.getJoueur(1));
@@ -163,7 +164,7 @@ int Jeu::menuJeuRafale(std::ostream& sout, std::istream& sin)
         bool* type = vecJoueur[i]->getTypeAccepte();
         type[1] = false; type[2] = false; type[3] = false; type[4] = false;
     }
-    while (vecJoueur[0]->aPerdu())
+    while (!vecJoueur[0]->aPerdu())
     {
         for (int i = 0; i < 6 - vecJoueur[0]->nBateau(); i++)
             menuTir(sout, sin, vecJoueur[0], vecJoueur[1]);
@@ -202,7 +203,7 @@ int Jeu::menuJeuStrategique(std::ostream& sout, std::istream& sin)
         bool* type = vecJoueur[i]->getTypeAccepte();
         type[4] = false;
     }
-    while (vecJoueur[0]->aPerdu())
+    while (!vecJoueur[0]->aPerdu())
     {        
         menuTir(sout, sin, vecJoueur[0], vecJoueur[1]);
         if (vecJoueur[0]->nBateau() == 2)
@@ -229,11 +230,17 @@ bool Jeu::afficherTir1(std::ostream& sout, Joueur *joueur, Joueur *adversaire)
     else
         sout << "Joueur 2 : " << std::endl;
     sout << "Choix de missile :" << std::endl;
-    sout << "1 : Missile normal (1 case) (prend 1 tour)" << std::endl;
-    sout << "2 : Sonde géographique (5 cases en losange) (prend 1 tour) (ne cause pas de dommage)" << std::endl;
-    sout << "3 : Missile ligne (5 cases en ligne droite HORIZONTALE) (prend 3 tour)" << std::endl;
-    sout << "4 : Missile colonne (5 cases en ligne droite VERTICALE) (prend 3 tour)" << std::endl;
-    sout << "5 : Missile Bombe (5 cases en losange) (prend 3 tour)" << std::endl;
+    bool* type = joueur->getTypeAccepte();
+    if (type[0])
+        sout << "1 : Missile normal (1 case) (prend 1 tour)" << std::endl;
+    if (type[1])
+        sout << "2 : Sonde géographique (5 cases en losange) (prend 1 tour) (ne cause pas de dommage)" << std::endl;
+    if (type[2])
+        sout << "3 : Missile ligne (5 cases en ligne droite HORIZONTALE) (prend 3 tour)" << std::endl;
+    if (type[3])
+        sout << "4 : Missile colonne (5 cases en ligne droite VERTICALE) (prend 3 tour)" << std::endl;
+    if (type[4])
+        sout << "5 : Missile Bombe (5 cases en losange) (prend 3 tour)" << std::endl;
     sout << "Choissisez le type de missile : ";
     return true;
 }
@@ -251,7 +258,7 @@ bool Jeu::afficherTir2(std::ostream& sout, Joueur* joueur, Joueur* adversaire)
 int Jeu::menuTir(std::ostream& sout, std::istream& sin,Joueur* joueur, Joueur* adversaire)
 {
     Coordonnee cord = {-1,-1};
-    int reponse = 1;
+    int reponse = 0;
     do {
         if (joueur->getChargement() > 0)
         {
@@ -259,6 +266,7 @@ int Jeu::menuTir(std::ostream& sout, std::istream& sin,Joueur* joueur, Joueur* a
             joueur->setChargement(joueur->getChargement() - 1);
             if (joueur->getChargement() == 0) //Fin du chargement
             {
+                sout << "I shitted :(" << std::endl;
                 cord = joueur->getCordAttente();
                 switch (joueur->getTypeMissile())
                 {
@@ -294,6 +302,7 @@ int Jeu::menuTir(std::ostream& sout, std::istream& sin,Joueur* joueur, Joueur* a
                 }
                 break;
             }
+            break;
 
         }
         //Déterminer le type de Missile
@@ -331,6 +340,7 @@ int Jeu::menuTir(std::ostream& sout, std::istream& sin,Joueur* joueur, Joueur* a
                 joueur->setChargement(3);
             else
                 joueur->setChargement(2);
+            joueur->setCordAttente(cord);
             break;
         }
         
@@ -377,4 +387,9 @@ void Jeu::ajouterJoueur()
 Joueur* Jeu::getJoueur(int index)
 {
     return vecJoueur[index];
+}
+
+int Jeu::getMode()
+{
+    return mode;
 }

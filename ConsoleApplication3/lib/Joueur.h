@@ -21,9 +21,9 @@ class Joueur {
         int sonder(Coordonnee position, Joueur* adversaire);
         bool ajouterBateau(int x, int y, bool horizontal, int taille);
         int getChargement();
-        void setChargement(int);
+        void setChargement(int charge);
         int getTypeMissile();
-        bool setTypeMissile(int);
+        bool setTypeMissile(int type);
         Coordonnee getCordAttente();
         void setCordAttente(Coordonnee);
         void afficherHistoriqueTir(std::ostream& s);

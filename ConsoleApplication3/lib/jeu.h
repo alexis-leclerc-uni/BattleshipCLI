@@ -35,6 +35,7 @@ class Jeu {
         int menuFin(std::ostream& sout, std::istream& sin);
         void ajouterJoueur();
         Joueur* getJoueur(int index);
+        int getMode();
     private:
         int tailleEnX;
         int tailleEnY;
