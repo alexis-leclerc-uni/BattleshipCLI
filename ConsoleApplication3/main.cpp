@@ -72,6 +72,9 @@ int main()
         case MODE_STRATEGIE:
             jeu.menuJeuStrategique(std::cout, std::cin);
             break;
+        case MODE_PARABOLE:
+            jeu.menuJeuParabole(std::cout, std::cin);
+            break;
         }
         
         while ((reponse = jeu.menuFin(std::cout, std::cin)) == INCORRECT) {}

@@ -1,5 +1,5 @@
 #include "jeu.h"
-
+#include <cmath>
 //Description : Construit le jeu
 //Entrée : rien
 //Sortie : rien
@@ -70,6 +70,7 @@ bool Jeu::afficherMode(std::ostream& sout)
     sout << "1 : Mode normal" << std::endl;
     sout << "2 : Mode rafale" << std::endl;
     sout << "3 : Mode stratégique" << std::endl;
+    sout << "4 : Mode Balistique" << std::endl;
     sout << "Votre choix : ";
     return true;
 }
@@ -82,7 +83,7 @@ int Jeu::menuReglage(std::ostream& sout, std::istream& sin)
     do {
         afficherMode(sout);
         sin >> mode;
-    } while (mode <= 0 || mode > 3);
+    } while (mode <= 0 || mode > 4);
     do {
         afficherTailleEnX(sout);
         sin >> tailleEnX;
@@ -91,14 +92,14 @@ int Jeu::menuReglage(std::ostream& sout, std::istream& sin)
         afficherTailleEnY(sout);
         sin >> tailleEnY;
     } while (tailleEnY <= 0);
-    
+
 
     return CONFIRMER;
 }
 //Description : Afficher le menu pour que le joueur initialise ses bateaux
 //Entrée : un canal de communication
 //Sortie : Vrai si ça affiche
-bool Jeu::afficherInitJoueur(std::ostream& sout, Joueur *joueur)
+bool Jeu::afficherInitJoueur(std::ostream& sout, Joueur* joueur)
 {
     sout << "Il faut placer les bateaux" << std::endl;
     return false;
@@ -106,7 +107,7 @@ bool Jeu::afficherInitJoueur(std::ostream& sout, Joueur *joueur)
 //Description : Indique la taille du bateau
 //Entrée : un canal de communication
 //Sortie : Vrai si ça affiche
-bool Jeu::afficherInitTaille(std::ostream& sout, Joueur *joueur, int taille)
+bool Jeu::afficherInitTaille(std::ostream& sout, Joueur* joueur, int taille)
 {
     sout << "La taille est de " << taille << ". Placer selon le format suivant : x y horizontal" << std::endl;
     return false;
@@ -114,10 +115,10 @@ bool Jeu::afficherInitTaille(std::ostream& sout, Joueur *joueur, int taille)
 //Description : Le joueur installe ses bateaux
 //Entrée : un canal de communication et la taille du bateau
 //Sortie : 0 pour Confirmer, 1 pour revenir en arrière
-int Jeu::menuInitJoueur(std::ostream& sout, std::istream& sin,Joueur* joueur)
+int Jeu::menuInitJoueur(std::ostream& sout, std::istream& sin, Joueur* joueur)
 {
     afficherInitJoueur(sout, joueur);
-    int tailleBateau[] = {5,4,3,3,2};
+    int tailleBateau[] = { 5,4,3,3,2 };
     int x = -1; int y = -1;
     bool horizontal;
     for (int i = 0; i < 5; i++)
@@ -126,8 +127,8 @@ int Jeu::menuInitJoueur(std::ostream& sout, std::istream& sin,Joueur* joueur)
         do {
             afficherInitTaille(sout, joueur, tailleBateau[i]);
             sin >> x >> y >> horizontal;
-        } while (!joueur->ajouterBateau(x,y,horizontal,tailleBateau[i]));
-        
+        } while (!joueur->ajouterBateau(x, y, horizontal, tailleBateau[i]));
+
     }
     return CONFIRMER;
 }
@@ -153,6 +154,7 @@ int Jeu::menuJeuNormal(std::ostream& sout, std::istream& sin)
     }
     return CONFIRMER;
 }
+
 //Description : le jeu en mode rafale
 //Entrée : un canal de communication
 //Sortie : 0 pour Confirmer 
@@ -169,13 +171,13 @@ int Jeu::menuJeuRafale(std::ostream& sout, std::istream& sin)
         for (int i = 0; i < 6 - vecJoueur[0]->nBateau(); i++)
             menuTir(sout, sin, vecJoueur[0], vecJoueur[1]);
         //jeu.menuTir(std::cout, std::cin, jeu.getJoueur(0), jeu.getJoueur(1));
-            if (vecJoueur[1]->aPerdu())
-                break;
+        if (vecJoueur[1]->aPerdu())
+            break;
         for (int i = 0; i < 6 - vecJoueur[1]->nBateau(); i++)
             menuTir(sout, sin, vecJoueur[1], vecJoueur[0]);
         //jeu.menuTir(std::cout, std::cin, jeu.getJoueur(1), jeu.getJoueur(0));<
-            if (vecJoueur[0]->aPerdu())
-                break;
+        if (vecJoueur[0]->aPerdu())
+            break;
     }
     return CONFIRMER;
 }
@@ -196,7 +198,7 @@ int Jeu::menuJeuStrategique(std::ostream& sout, std::istream& sin)
     *  Quand il reste 1 bateau :
     *   - missile bombe (2 tours pour charger)
     *   - missile colonne/ligne (2 tours pour charger)
-    
+
     */
     for (int i = 0; i < 2; i++)
     {
@@ -204,11 +206,11 @@ int Jeu::menuJeuStrategique(std::ostream& sout, std::istream& sin)
         type[4] = false;
     }
     while (!vecJoueur[0]->aPerdu())
-    {        
+    {
         menuTir(sout, sin, vecJoueur[0], vecJoueur[1]);
         if (vecJoueur[0]->nBateau() == 2)
             vecJoueur[0]->getTypeAccepte()[4] = true;
-        
+
         //jeu.menuTir(std::cout, std::cin, jeu.getJoueur(0), jeu.getJoueur(1));
         if (vecJoueur[1]->aPerdu())
             break;
@@ -219,10 +221,74 @@ int Jeu::menuJeuStrategique(std::ostream& sout, std::istream& sin)
     }
     return CONFIRMER;
 }
+//Description : le jeu en mode parabolique
+//Entrée : un canal de communication
+//Sortie : 0 pour Confirmer 
+int Jeu::menuJeuParabole(std::ostream& sout, std::istream& sin)
+{
+    //On a droit seulement au missile normal, mais on en a plus au fil du jeu
+    for (int i = 0; i < 2; i++)
+    {
+        bool* type = vecJoueur[i]->getTypeAccepte();
+        type[1] = false; type[2] = false; type[3] = false; type[4] = false;
+    }
+    while (!vecJoueur[0]->aPerdu())
+    {
+        menuParabole(sout, sin, vecJoueur[0], vecJoueur[1]);
+        //jeu.menuTir(std::cout, std::cin, jeu.getJoueur(0), jeu.getJoueur(1));
+        if (vecJoueur[1]->aPerdu())
+            break;
+        menuParabole(sout, sin, vecJoueur[1], vecJoueur[0]);
+        //jeu.menuTir(std::cout, std::cin, jeu.getJoueur(1), jeu.getJoueur(0));
+    }
+    return CONFIRMER;
+}
+
+
+int Jeu::menuParabole(std::ostream& sout, std::istream& sin, Joueur* joueur, Joueur* adversaire)
+{
+    Coordonnee cord = { -1,-1 };
+    int reponse = 0;
+    do {
+        int type;
+        int elevation;// degre elevation horizon=0
+        int angle; // rotation gauche droite
+        int vitesseTir;// puissance du tir
+        int distance;
+        do {
+            afficherTir1(sout, joueur, adversaire);
+            sin >> type;
+        } while (!joueur->setTypeMissile(type));
+        afficherTir3(sout, joueur, adversaire);
+        sin >> elevation >> angle >> vitesseTir;
+        float vitX = vitesseTir * sinf((elevation * 2 * 3.1415) / 360);
+        float vitY = vitesseTir * cosf((elevation * 2 * 3.1415) / 360);
+        sout << vitX << vitY << std::endl;
+        float t1 = (vitY + sqrtf(vitY * vitY)) / 9.8;
+        float t2 = (vitY - sqrtf(vitY * vitY)) / 9.8;
+        sout << t1 << t2 << std::endl;
+        if (t1 == 0.0)
+        {
+            distance = vitX * t2;
+        }
+        if (t2 == 0.0)
+        {
+            distance = vitX * t1;
+        }
+        sout << distance << std::endl;
+        cord.x = -2 + distance * cosf(angle * 2 * 3.1415 / 360);
+        cord.y = 4 + distance * sinf(angle * 2 * 3.1415 / 360);
+        sout << cord.x << cord.y << std::endl;
+        reponse = joueur->tirer(cord, adversaire);
+
+    } while (reponse == 1 || reponse == 2);
+    return false;
+}
+
 //Description : Afficher le menu pour que le joueur tir sur l'adversaire
 //Entrée : un canal de communication
 //Sortie : Vrai si ça affiche
-bool Jeu::afficherTir1(std::ostream& sout, Joueur *joueur, Joueur *adversaire)
+bool Jeu::afficherTir1(std::ostream& sout, Joueur* joueur, Joueur* adversaire)
 {
     adversaire->afficherHistoriqueTir(sout);
     if (vecJoueur[0] == joueur)
@@ -252,12 +318,23 @@ bool Jeu::afficherTir2(std::ostream& sout, Joueur* joueur, Joueur* adversaire)
     sout << "Rentrer la position de votre missile (x y) : ";
     return true;
 }
+
+//Description : Afficher le menu pour que le joueur tir sur l'adversaire
+//Entrée : un canal de communication
+//Sortie : Vrai si ça affiche
+bool Jeu::afficherTir3(std::ostream& sout, Joueur* joueur, Joueur* adversaire)
+{
+    sout << "Votre position:(-2,-5)" << std::endl << "Rentrer elevation(°), angle(°) et puissance de votre missile : ";
+    return true;
+}
+
+
 //Description : Le joueur tir sur son adversaire
 //Entrée : un canal de communication
 //Sortie : 0 si tout va bien
-int Jeu::menuTir(std::ostream& sout, std::istream& sin,Joueur* joueur, Joueur* adversaire)
+int Jeu::menuTir(std::ostream& sout, std::istream& sin, Joueur* joueur, Joueur* adversaire)
 {
-    Coordonnee cord = {-1,-1};
+    Coordonnee cord = { -1,-1 };
     int reponse = 0;
     do {
         if (joueur->getChargement() > 0)
@@ -298,7 +375,7 @@ int Jeu::menuTir(std::ostream& sout, std::istream& sin,Joueur* joueur, Joueur* a
                     --cord.x; ++cord.y;
                     joueur->tirer(cord, adversaire);
                     break;
-                    
+
                 }
                 break;
             }
@@ -321,7 +398,7 @@ int Jeu::menuTir(std::ostream& sout, std::istream& sin,Joueur* joueur, Joueur* a
             break;
 
         case M_SONDE:
-            
+
             //La sonde géographique
             joueur->sonder(cord, adversaire);
             --cord.x;
@@ -343,7 +420,7 @@ int Jeu::menuTir(std::ostream& sout, std::istream& sin,Joueur* joueur, Joueur* a
             joueur->setCordAttente(cord);
             break;
         }
-        
+
     } while (reponse == 1 || reponse == 2);
     return false;
 }
@@ -378,7 +455,7 @@ int Jeu::menuFin(std::ostream& sout, std::istream& sin)
 //Sortie : rien
 void Jeu::ajouterJoueur()
 {
-    vecJoueur.push_back(new Joueur(tailleEnX,tailleEnY));
+    vecJoueur.push_back(new Joueur(tailleEnX, tailleEnY));
     return;
 }
 //Description : renvoie le joueur sélectionné
